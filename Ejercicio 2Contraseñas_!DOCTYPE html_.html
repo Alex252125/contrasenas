@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Contraseñas Seguras</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: auto;
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #218838;
+        }
+        .strength {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Generador de Contraseñas Seguras</h2>
+        <button onclick="generatePassword()">Generar Contraseña</button>
+        <input type="text" id="password" readonly>
+        <button onclick="copyPassword()">Copiar</button>
+
+        <h3>Verificar Contraseña</h3>
+        <input type="text" id="passwordInput" placeholder="Introduce tu contraseña">
+        <button onclick="checkPassword()">Evaluar Seguridad</button>
+        <p class="strength" id="strengthText"></p>
+    </div>
+
+    <script>
+        function generatePassword() {
+            const length = 16;
+            const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+[]{}<>?";
+            let password = "";
+            for (let i = 0; i < length; i++) {
+                password += charset.charAt(Math.floor(Math.random() * charset.length));
+            }
+            document.getElementById("password").value = password;
+        }
+
+        function copyPassword() {
+            const passwordField = document.getElementById("password");
+            passwordField.select();
+            document.execCommand("copy");
+            alert("Contraseña copiada al portapapeles.");
+        }
+
+        function checkPassword() {
+            const password = document.getElementById("passwordInput").value;
+            let strengthText = "";
+            let strength = 0;
+
+            if (password.length >= 12) strength++;
+            if (/[A-Z]/.test(password)) strength++;
+            if (/[a-z]/.test(password)) strength++;
+            if (/[0-9]/.test(password)) strength++;
+            if (/[\W_]/.test(password)) strength++;
+
+            switch (strength) {
+                case 5:
+                    strengthText = "Muy fuerte 💪";
+                    break;
+                case 4:
+                    strengthText = "Fuerte 🙂";
+                    break;
+                case 3:
+                    strengthText = "Moderada 😐";
+                    break;
+                case 2:
+                    strengthText = "Débil 😕";
+                    break;
+                default:
+                    strengthText = "Muy débil 😞";
+            }
+
+            document.getElementById("strengthText").innerText = `Seguridad: ${strengthText}`;
+        }
+    </script>
+
+</body>
+</html>
